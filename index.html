@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mariyam, Sen Uchun...</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-glow: #ff4d6d;
+            --gold-accent: #d4af37;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #050505;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            color: #ffffff;
+        }
+
+        /* Animated Dark/Romantic Gradient Background */
+        .bg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #2a0815 0%, #050505 100%);
+            z-index: 1;
+        }
+
+        /* Starry / Dust Particles */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        /* Main Content Container */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        /* Typography */
+        .font-cursive { font-family: 'Great Vibes', cursive; }
+        .font-elegant { font-family: 'Cinzel', serif; }
+
+        /* Step 1: The Heart Button */
+        .intro-screen {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.5s ease-in-out, transform 1.5s ease;
+        }
+
+        .glowing-heart-container {
+            position: relative;
+            cursor: pointer;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .glowing-heart {
+            width: 100px;
+            height: 100px;
+            background: #ff4d6d;
+            position: relative;
+            transform: rotate(-45deg);
+            box-shadow: 0 0 40px #ff4d6d, 0 0 80px #c9184a;
+            transition: all 0.3s ease;
+        }
+
+        .glowing-heart::before,
+        .glowing-heart::after {
+            content: '';
+            width: 100px;
+            height: 100px;
+            background: #ff4d6d;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .glowing-heart::before { top: -50px; left: 0; }
+        .glowing-heart::after { top: 0; left: 50px; }
+
+        .glowing-heart-container:hover .glowing-heart {
+            transform: rotate(-45deg) scale(1.1);
+            box-shadow: 0 0 60px #ff4d6d, 0 0 100px #c9184a;
+        }
+
+        .heart-pulse {
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            20% { transform: scale(1.1); }
+            40% { transform: scale(1); }
+            60% { transform: scale(1.1); }
+            80% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* Text Sequences */
+        .sequence-screen {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .seq-text {
+            position: absolute;
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: all 2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1.5rem;
+            line-height: 1.6;
+            color: #ffe4e6;
+            text-shadow: 0 0 20px rgba(255, 77, 109, 0.5);
+            max-width: 800px;
+        }
+
+        @media (min-width: 768px) {
+            .seq-text { font-size: 2.5rem; }
+        }
+
+        .seq-text.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .seq-text.fade-out {
+            opacity: 0;
+            transform: translateY(-30px) scale(1.05);
+        }
+
+        /* Final Screen */
+        .final-screen {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 2s ease-in-out;
+            background: radial-gradient(circle at center, #4a0414 0%, #050505 100%);
+            z-index: 20;
+        }
+
+        .final-screen.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .gold-text {
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Falling Rose Petals / Golden Dust */
+        .petal {
+            position: absolute;
+            background: radial-gradient(circle, #ff4d6d, #c9184a);
+            border-radius: 150% 0 150% 0;
+            transform-origin: center;
+            animation: fall linear forwards;
+            opacity: 0.8;
+            box-shadow: 0 0 10px #ff4d6d;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translateY(0) rotate(45deg) scale(1); }
+            100% { transform: translateY(110vh) rotate(720deg) scale(1); opacity: 0; }
+        }
+
+        .hidden {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transform: scale(0.9) !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-layer"></div>
+    <!-- Simple JS particle system container -->
+    <div id="particles-js"></div>
+
+    <div class="content">
+        <!-- Intro Screen -->
+        <div id="intro" class="intro-screen">
+            <h1 class="font-cursive text-5xl md:text-7xl mb-12 tracking-wider text-rose-200 drop-shadow-[0_0_15px_rgba(255,228,230,0.5)]" style="opacity: 0; animation: fadeIn 2s forwards 0.5s;">Mariyam...</h1>
+            <div class="glowing-heart-container heart-pulse" id="start-btn" style="opacity: 0; animation: fadeIn 2s forwards 1.5s;">
+                <div class="glowing-heart"></div>
+            </div>
+            <p class="font-elegant text-sm md:text-lg mt-16 text-gray-400 tracking-widest uppercase" style="opacity: 0; animation: fadeIn 2s forwards 2.5s;">Siringni ochish uchun yurakni bos</p>
+        </div>
+
+        <!-- Messages Sequence -->
+        <div id="sequence" class="sequence-screen">
+            <div class="seq-text font-elegant">Bu dunyoda milliardlab insonlar bor...</div>
+            <div class="seq-text font-elegant">Ammo mening ko'zlarim faqat <span class="font-cursive text-rose-400 text-5xl md:text-7xl lowercase" style="line-height: 0.5;">seni</span> ko'radi.</div>
+            <div class="seq-text font-elegant">Sen mening hayotimdagi eng chiroyli tasodifimsan.</div>
+            <div class="seq-text font-elegant">Har bir tabassuming, <br>mening qorong'u olamimni yoritadi.</div>
+            <div class="seq-text font-elegant">Men butun umr faqat shu tabassumni <br>ko'rib yashashni xohlayman...</div>
+        </div>
+
+        <!-- Final Reveal -->
+        <div id="final" class="final-screen px-4 text-center">
+            <h2 class="font-elegant text-2xl md:text-4xl text-gray-300 mb-4 tracking-widest uppercase">Mening Yagonam</h2>
+            <h1 class="font-cursive text-7xl md:text-9xl mb-8 gold-text drop-shadow-[0_0_40px_rgba(212,175,55,0.6)]">Mariyam</h1>
+            <div class="w-full max-w-2xl h-[1px] bg-gradient-to-r from-transparent via-rose-400 to-transparent mb-8 mx-auto"></div>
+            <p class="font-elegant text-3xl md:text-6xl font-bold text-white tracking-widest" style="text-shadow: 0 0 30px rgba(255,255,255,0.5);">MEN SENI SEVAMAN!</p>
+            <p class="font-cursive text-4xl md:text-5xl text-rose-300 mt-8">Sen mening borlig'imsan ❤️</p>
+        </div>
+    </div>
+
+    <style>
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+    </style>
+
+    <script>
+        // Simple Particle System for background stars/dust
+        const canvas = document.createElement('canvas');
+        document.getElementById('particles-js').appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > width) this.speedX *= -1;
+                if (this.y < 0 || this.y > height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 228, 230, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 150; i++) particles.push(new Particle());
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Main Logic
+        const startBtn = document.getElementById('start-btn');
+        const introScreen = document.getElementById('intro');
+        const finalScreen = document.getElementById('final');
+        const messages = document.querySelectorAll('.seq-text');
+
+        startBtn.addEventListener('click', () => {
+            introScreen.classList.add('hidden');
+            
+            setTimeout(playSequence, 1500);
+        });
+
+        function playSequence() {
+            let delay = 0;
+            const displayTime = 4000;
+            const transitionTime = 1500;
+
+            messages.forEach((msg, index) => {
+                // Show message
+                setTimeout(() => {
+                    msg.classList.add('active');
+                }, delay);
+
+                delay += displayTime;
+
+                // Hide message
+                setTimeout(() => {
+                    msg.classList.remove('active');
+                    msg.classList.add('fade-out');
+                }, delay);
+
+                delay += transitionTime;
+            });
+
+            // Final Reveal
+            setTimeout(() => {
+                finalScreen.classList.add('active');
+                startPetals();
+            }, delay + 500);
+        }
+
+        // Petal / Gold Dust Generator for final screen
+        function startPetals() {
+            setInterval(() => {
+                const petal = document.createElement('div');
+                petal.classList.add('petal');
+                
+                // Randomize properties
+                const size = Math.random() * 15 + 10;
+                petal.style.width = `${size}px`;
+                petal.style.height = `${size}px`;
+                petal.style.left = `${Math.random() * 100}vw`;
+                
+                const duration = Math.random() * 4 + 4;
+                petal.style.animationDuration = `${duration}s`;
+                
+                // Sometimes make it golden instead of rose
+                if (Math.random() > 0.7) {
+                    petal.style.background = 'radial-gradient(circle, #fcf6ba, #b38728)';
+                    petal.style.boxShadow = '0 0 10px #d4af37';
+                }
+                
+                document.body.appendChild(petal);
+                
+                setTimeout(() => {
+                    petal.remove();
+                }, duration * 1000);
+            }, 100);
+        }
+    </script>
+</body>
+</html>
